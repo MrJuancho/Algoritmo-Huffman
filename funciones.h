@@ -19,6 +19,14 @@ typedef struct _Nodo{
     struct _Nodo *R;
 }Nodo;
 
+typedef struct _NodoBin{
+    char letra;
+    long int bits;
+    char nbits;
+
+    struct _NodoBin *sig;
+}NodoBin;
+
 Nodo* allocateMem(char dato, int frec){
     Nodo* dummy;
     dummy = (Nodo*)malloc(sizeof(Nodo));
@@ -28,6 +36,42 @@ Nodo* allocateMem(char dato, int frec){
     dummy -> R = NULL;
     dummy -> L = NULL;
     return dummy;
+}
+
+NodoBin* allocateMemBin(char letra, long int bits, char nbits){
+    NodoBin* dummy;
+    dummy = (NodoBin*)malloc(sizeof(NodoBin));
+    dummy -> letra = letra;
+    dummy -> bits = bits;
+    dummy -> nbits = nbits;
+    dummy -> sig = NULL;
+    return dummy;
+}
+
+void InsertarTabla(NodoBin** Tabla,char caracter,long int altura, int valor){
+    NodoBin *auxiliar, *auxiliar_ref, *auxiliar_asignacion;
+    auxiliar = allocateMemBin(caracter,valor,altura);
+    if(!*Tabla){
+        *Tabla = auxiliar;
+        (*Tabla)->sig = NULL;
+    }else{
+        auxiliar_ref = *Tabla;
+        auxiliar_asignacion = NULL;
+        while(auxiliar_ref && auxiliar_ref->letra < auxiliar->letra){
+            auxiliar_asignacion = auxiliar_ref;
+            auxiliar_ref = auxiliar_ref->sig;
+        }
+        auxiliar->sig = auxiliar_ref;
+        if(auxiliar_asignacion) auxiliar_asignacion->sig = auxiliar;
+        else *Tabla = auxiliar;
+    }
+}
+
+void CrearTabla(Nodo *arbol, int altura, int rec_binario, NodoBin **tabla)
+{
+    if(arbol->R)  CrearTabla(arbol->R, altura+1, rec_binario << 1|1,tabla);
+    if(arbol->L) CrearTabla(arbol->L, altura+1, rec_binario << 1,tabla);
+    if(!arbol->R && !arbol->L) InsertarTabla(tabla,arbol->dato, altura, rec_binario);
 }
 
 void *Formatear_texto(char *s){
@@ -49,7 +93,9 @@ void Contar_Frecuancias(char *s, int *count) {
     while (s[c] != '\0') {
         if (s[c] >= 'a' && s[c] <= 'z')
             count[s[c]-'a']++;
-        else if(s[c] == ' ') count[26]++;
+        else if(s[c] == ' ') count[28]++;
+        else if(s[c] == '.') count[26]++;
+        else if(s[c] == ',') count[27]++;
         c++;
     }
 }
@@ -115,24 +161,24 @@ void alta(Nodo ** top, char dato, int frec)
 
 void moveleft(Nodo **top)
 {
-    Nodo *a,*p;
-    p=(*top);
-    a=(*top)->L;
-    while(a->R!=NULL)
+    Nodo *auxiliar_asignacion,*auxiliar_ref;
+    auxiliar_ref=(*top);
+    auxiliar_asignacion=(*top)->L;
+    while(auxiliar_asignacion->R!=NULL)
     {
-        p=a;
-        a=a->R;
+        auxiliar_ref=auxiliar_asignacion;
+        auxiliar_asignacion=auxiliar_asignacion->R;
     }
-    (*top)->dato=a->dato;
-    if(p==(*top))
+    (*top)->dato=auxiliar_asignacion->dato;
+    if(auxiliar_ref==(*top))
     {
-        p->L=a->L;
+        auxiliar_ref->L=auxiliar_asignacion->L;
     }
     else
     {
-        p->R=a->L;
+        auxiliar_ref->R=auxiliar_asignacion->L;
     }
-    (*top)=a;
+    (*top)=auxiliar_asignacion;
 }
 
 void baja(Nodo **top,int dato)
@@ -232,19 +278,19 @@ Nodo *OrdenamientoSeleccion(Nodo *top) {
 }
 
 void InsertarOrden(Nodo** Cabeza, Nodo *e){
-    Nodo *p, *a;
+    Nodo *auxiliar_ref, *auxiliar_asignacion;
     if(!*Cabeza){
         *Cabeza = e;
         (*Cabeza)->sig = NULL;
     }else{
-        p = *Cabeza;
-        a = NULL;
-        while(p && p->frec < e->frec){
-            a = p;
-            p = p->sig;
+        auxiliar_ref = *Cabeza;
+        auxiliar_asignacion = NULL;
+        while(auxiliar_ref && auxiliar_ref->frec < e->frec){
+            auxiliar_asignacion = auxiliar_ref;
+            auxiliar_ref = auxiliar_ref->sig;
         }
-        e->sig = p;
-        if(a) a->sig = e;
+        e->sig = auxiliar_ref;
+        if(auxiliar_asignacion) auxiliar_asignacion->sig = e;
         else *Cabeza = e;
     }
 }

@@ -4,12 +4,12 @@
 
 int main() {
     char principal;
-    char abcdario[27] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-                    'u', 'v', 'w', 'x', 'y', 'z', '#'};
-    int conteos[27] = {0};
-    Nodo *lista_frec = NULL, *arbolitos;
-    Nodo *Arbol;
-    char* n_in = "frase.txt", *n_out = "cifrado.txt",
+    char abcdario[29] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+                    'u', 'v', 'w', 'x', 'y', 'z','.',',','#'};
+    int conteos[29] = {0};
+    Nodo *lista_frec = NULL, *arbolitos, *Arbol;
+    NodoBin *Binarios;
+    char* n_in = "frase.txt", *n_out = "arbol.txt", *cifrado_bin = "binario.txt",
     letras[100];
     FILE *archivo = fopen(n_in, "rt");
     if (archivo == NULL) {
@@ -20,7 +20,7 @@ int main() {
     }
     Formatear_texto(letras);
     Contar_Frecuancias(letras,conteos);
-    for (int i = 0; i < 27 ; ++i) {
+    for (int i = 0; i < 29 ; ++i) {
         if(conteos[i] != 0) lista_frec = Alta_Inicial(abcdario[i], conteos[i], lista_frec);
     }
     lista_frec = OrdenamientoSeleccion(lista_frec);
@@ -48,6 +48,23 @@ int main() {
             FILE *out  = fopen(n_out, "w");
             preOrden_PIMP(Arbol,out);
             fclose(out);
+
+            Binarios = NULL;
+            CrearTabla(Arbol,0,0,&Binarios);
+
+            if(Binarios != NULL){
+                int i = 0;
+                while (Binarios != NULL){
+                    printf("Letra: %c ; Frec: %d %d\n", Binarios -> letra, Binarios -> bits, Binarios -> nbits);
+                    Binarios = Binarios -> sig;
+                    i++;
+                }
+                printf("La lista tiene %d datos\n", i);
+            }else{
+                puts("Tu Lista esta vacia\n");
+            }
+
+            FILE *outCifrado = fopen(cifrado_bin, "w");
 
 
             break;
