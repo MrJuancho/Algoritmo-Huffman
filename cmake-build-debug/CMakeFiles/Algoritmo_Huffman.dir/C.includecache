@@ -6,9 +6,21 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/sala8/Documents/Algoritmo Huffman/main.c
+C:/Users/MrJua/Documents/Algoritmo-Huffman/funciones.h
+string.h
+-
 stdio.h
 -
 ctype.h
 -
+stdlib.h
+-
+
+C:/Users/MrJua/Documents/Algoritmo-Huffman/main.c
+stdio.h
+-
+ctype.h
+-
+funciones.h
+C:/Users/MrJua/Documents/Algoritmo-Huffman/funciones.h
 

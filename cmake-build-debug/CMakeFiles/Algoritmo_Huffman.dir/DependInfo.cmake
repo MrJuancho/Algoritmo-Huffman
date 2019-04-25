@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "C:/Users/sala8/Documents/Algoritmo Huffman/main.c" "C:/Users/sala8/Documents/Algoritmo Huffman/cmake-build-debug/CMakeFiles/Algoritmo_Huffman.dir/main.c.obj"
+  "C:/Users/MrJua/Documents/Algoritmo-Huffman/main.c" "C:/Users/MrJua/Documents/Algoritmo-Huffman/cmake-build-debug/CMakeFiles/Algoritmo_Huffman.dir/main.c.obj"
   )
 set(CMAKE_C_COMPILER_ID "MSVC")
 
