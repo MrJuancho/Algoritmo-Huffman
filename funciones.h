@@ -23,6 +23,7 @@ typedef struct _NodoBin{
     char letra;
     long int bits;
     char nbits;
+    char *binary;
 
     struct _NodoBin *sig;
 }NodoBin;
@@ -38,19 +39,20 @@ Nodo* allocateMem(char dato, int frec){
     return dummy;
 }
 
-NodoBin* allocateMemBin(char letra, long int bits, char nbits){
+NodoBin* allocateMemBin(char letra, long int bits, char nbits,char* binary){
     NodoBin* dummy;
     dummy = (NodoBin*)malloc(sizeof(NodoBin));
     dummy -> letra = letra;
     dummy -> bits = bits;
     dummy -> nbits = nbits;
+    dummy ->binary = binary;
     dummy -> sig = NULL;
     return dummy;
 }
 
-void InsertarTabla(NodoBin** Tabla,char caracter,long int altura, int valor){
+void InsertarTabla(NodoBin** Tabla,char caracter,long int altura, int valor,char *referencias){
     NodoBin *auxiliar, *auxiliar_ref, *auxiliar_asignacion;
-    auxiliar = allocateMemBin(caracter,valor,altura);
+    auxiliar = allocateMemBin(caracter,valor,altura,referencias);
     if(!*Tabla){
         *Tabla = auxiliar;
         (*Tabla)->sig = NULL;
@@ -71,7 +73,76 @@ void CrearTabla(Nodo *arbol, int altura, int rec_binario, NodoBin **tabla)
 {
     if(arbol->R)  CrearTabla(arbol->R, altura+1, rec_binario << 1|1,tabla);
     if(arbol->L) CrearTabla(arbol->L, altura+1, rec_binario << 1,tabla);
-    if(!arbol->R && !arbol->L) InsertarTabla(tabla,arbol->dato, altura, rec_binario);
+    if(!arbol->R && !arbol->L){
+        InsertarTabla(tabla,arbol->dato, altura, rec_binario,"");
+    }
+}
+
+int binario (int n) {
+    if(n==0) {
+        return n;
+    }else {
+        return binario(n / 2) * 10 + n % 2;
+    }
+}
+
+void implementarbin(NodoBin *Arbol) {
+    if (Arbol != NULL) {
+        int t = strlen(Arbol->binary);
+        if (t == (Arbol->nbits - 1)) {
+            char *array = "";
+            sprintf(array,"0%s",Arbol->binary);
+            Arbol->binary = array;
+        }
+    }
+}
+
+void mostrarBinarios(NodoBin *top){
+    if(top != NULL){
+        while(top != NULL){
+            printf("Caracter %c >> Bits  %s >> Profundidad %d\n", top->letra, top->binary, top->nbits);
+            top = top->sig;
+        }
+    }
+}
+
+NodoBin *ordenarApariciones(NodoBin *Binarios, char *string){
+    NodoBin *aux = Binarios;
+    for (int i = 0; i < strlen(string) ; ++i) {
+        if (aux->letra == string[i]){
+            aux = aux->sig;
+        }else{
+            char letra = aux->letra;
+            aux->letra = string[i];
+            string[i] = letra;
+        }
+    }
+    return Binarios;
+}
+
+char* guardarBinarios(NodoBin* top,FILE *fout) {
+    NodoBin *aux = top;
+    char* binarios = "";
+    if (aux != NULL) {
+        char *array = "";
+        while (aux->sig != NULL) {
+            int codigo = binario(aux->bits);
+            sprintf(array, "%d", codigo);
+            aux->binary = array;
+            implementarbin(aux);
+            fprintf(fout,"%s",aux->binary);
+            aux = aux->sig;
+        }
+    }
+    return binarios;
+}
+
+NodoBin *BuscaCaracter(NodoBin *Tabla, unsigned char c)
+{
+    NodoBin *t;
+    t = Tabla;
+    while(t && t->letra != c) t = t->sig;
+    return t;
 }
 
 void *Formatear_texto(char *s){
@@ -88,14 +159,23 @@ void *Formatear_texto(char *s){
     }
 }
 
-void Contar_Frecuancias(char *s, int *count) {
+void Contar_Frecuancias(char *s, int *count,char* acomodados) {
     int c = 0;
+    int rep = 0;
     while (s[c] != '\0') {
-        if (s[c] >= 'a' && s[c] <= 'z')
-            count[s[c]-'a']++;
-        else if(s[c] == ' ') count[28]++;
-        else if(s[c] == '.') count[26]++;
-        else if(s[c] == ',') count[27]++;
+        if (s[c] >= 'a' && s[c] <= 'z') {
+            acomodados[c] = s[c];
+            count[s[c] - 'a']++;
+        }else if(s[c] == ' '){
+            acomodados[c] = '#';
+            count[28]++;
+        }else if(s[c] == '.'){
+            acomodados[c] = s[c];
+            count[26]++;
+        }else if(s[c] == ','){
+            acomodados[c] = s[c];
+            count[27]++;
+        }
         c++;
     }
 }

@@ -8,9 +8,10 @@ int main() {
                     'u', 'v', 'w', 'x', 'y', 'z','.',',','#'};
     int conteos[29] = {0};
     Nodo *lista_frec = NULL, *arbolitos, *Arbol;
-    NodoBin *Binarios;
+    NodoBin *Binarios, *aux;
     char* n_in = "frase.txt", *n_out = "arbol.txt", *cifrado_bin = "binario.txt",
     letras[100];
+    char *letrasA = "\0";
     FILE *archivo = fopen(n_in, "rt");
     if (archivo == NULL) {
         puts("Este archivo no existe");
@@ -19,7 +20,16 @@ int main() {
         fgets(letras, 100, archivo);
     }
     Formatear_texto(letras);
-    Contar_Frecuancias(letras,conteos);
+    Contar_Frecuancias(letras,conteos,letrasA);
+    for (int j = 0; j < strlen(letrasA) ; ++j) {
+        for(int x = j + 1; letrasA[x] != '\0'; x++){
+            if(letrasA[x] == letrasA[j]){
+                for(int k = x; letrasA[k] != '\0'; k++){
+                    letrasA[k] = letrasA[k + 1];
+                }
+            }
+        }
+    }
     for (int i = 0; i < 29 ; ++i) {
         if(conteos[i] != 0) lista_frec = Alta_Inicial(abcdario[i], conteos[i], lista_frec);
     }
@@ -51,27 +61,24 @@ int main() {
 
             Binarios = NULL;
             CrearTabla(Arbol,0,0,&Binarios);
-
-            if(Binarios != NULL){
-                int i = 0;
-                while (Binarios != NULL){
-                    printf("Letra: %c ; Frec: %d %d\n", Binarios -> letra, Binarios -> bits, Binarios -> nbits);
-                    Binarios = Binarios -> sig;
-                    i++;
-                }
-                printf("La lista tiene %d datos\n", i);
-            }else{
-                puts("Tu Lista esta vacia\n");
+            FILE *out2 = fopen(cifrado_bin,"w");
+            mostrarBinarios(Binarios);
+            guardarBinarios(Binarios,out2);
+            fclose(out2);
+            FILE *sacarBin = fopen(cifrado_bin,"r");
+            char textobinario[200];
+            if (sacarBin == NULL) {
+                puts("Este archivo no existe");
+                exit(-1);
+            }else {
+                fgets(textobinario, 200, sacarBin);
             }
-
-            FILE *outCifrado = fopen(cifrado_bin, "w");
-
-
+            puts(textobinario);
             break;
         case '2':
             break;
         default:
-            puts("ÑOOO cheñol");
+            puts("?OOO che?ol");
             break;
         case '0':
             puts("Pinche practica fea osiosi");
