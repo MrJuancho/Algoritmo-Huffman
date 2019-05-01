@@ -11,7 +11,6 @@ int main() {
     NodoBin *Binarios, *aux;
     char* n_in = "frase.txt", *n_out = "arbol.txt", *cifrado_bin = "binario.txt",
     letras[100];
-    char *letrasA = "\0";
     FILE *archivo = fopen(n_in, "rt");
     if (archivo == NULL) {
         puts("Este archivo no existe");
@@ -20,16 +19,8 @@ int main() {
         fgets(letras, 100, archivo);
     }
     Formatear_texto(letras);
-    Contar_Frecuancias(letras,conteos,letrasA);
-    for (int j = 0; j < strlen(letrasA) ; ++j) {
-        for(int x = j + 1; letrasA[x] != '\0'; x++){
-            if(letrasA[x] == letrasA[j]){
-                for(int k = x; letrasA[k] != '\0'; k++){
-                    letrasA[k] = letrasA[k + 1];
-                }
-            }
-        }
-    }
+    puts(letras);
+    Contar_Frecuancias(letras,conteos);
     for (int i = 0; i < 29 ; ++i) {
         if(conteos[i] != 0) lista_frec = Alta_Inicial(abcdario[i], conteos[i], lista_frec);
     }
@@ -62,8 +53,7 @@ int main() {
             Binarios = NULL;
             CrearTabla(Arbol,0,0,&Binarios);
             FILE *out2 = fopen(cifrado_bin,"w");
-            mostrarBinarios(Binarios);
-            guardarBinarios(Binarios,out2);
+            guardarBinarios(Binarios,out2,letras);
             fclose(out2);
             FILE *sacarBin = fopen(cifrado_bin,"r");
             char textobinario[200];
