@@ -9,7 +9,7 @@ int main() {
     int conteos[29] = {0};
     Nodo *lista_frec = NULL, *arbolitos, *Arbol;
     NodoBin *Binarios, *aux;
-    char* n_in = "frase.txt", *n_out = "arbol.txt", *cifrado_bin = "binario.txt",
+    char* n_in = "frase.txt", *n_out = "arbol.txt", *cifrado_bin = "binario.txt",*compreso = "compreso.txt",
     letras[100];
     FILE *archivo = fopen(n_in, "rt");
     if (archivo == NULL) {
@@ -46,24 +46,47 @@ int main() {
                 InsertarOrden(&Arbol, arbolitos);
             }
             preOrden(Arbol);
-            FILE *out  = fopen(n_out, "w");
-            preOrden_PIMP(Arbol,out);
-            fclose(out);
+            FILE *outArbol  = fopen(n_out, "w");
+            preOrden_PIMP(Arbol,outArbol);
+            fclose(outArbol);
 
             Binarios = NULL;
-            CrearTabla(Arbol,0,0,&Binarios);
-            FILE *out2 = fopen(cifrado_bin,"w");
-            guardarBinarios(Binarios,out2,letras);
-            fclose(out2);
-            FILE *sacarBin = fopen(cifrado_bin,"r");
-            char textobinario[200];
-            if (sacarBin == NULL) {
+            CrearTabla(Arbol,0,0,&Binarios,0);
+            mostrarBinarios(Binarios);
+            FILE *outBinario = fopen(cifrado_bin,"w");
+            obetenerTiraBinaria(Binarios,letras,outBinario);
+            fclose(outBinario);
+            FILE *inBinario = fopen(cifrado_bin,"rt");
+            char *tiraBinaria = "";
+            if (inBinario == NULL) {
                 puts("Este archivo no existe");
-                exit(-1);
             }else {
-                fgets(textobinario, 200, sacarBin);
+                fgets(tiraBinaria, 1000, inBinario);
             }
-            puts(textobinario);
+            while(strlen(tiraBinaria)%8 != 0){
+                sprintf(tiraBinaria, "%s0",tiraBinaria);
+            }
+            puts(tiraBinaria);
+            int numeroEsp = strlen(tiraBinaria)/8;
+            int *caracteres = (int*)malloc(numeroEsp* sizeof(int));
+            int k = 0;
+            for (int i = 0; i < numeroEsp ; ++i) {
+                int decBin = 0;
+                char arregloDeBytes[8];
+                for (int j = 0; j < 8; ++j) {
+                    arregloDeBytes[j] = tiraBinaria[k];
+                    k++;
+                }
+                decBin = atoi(arregloDeBytes);
+                decBin = decimal(decBin);
+                caracteres[i] = decBin;
+            }
+            FILE *outCompreso = fopen(compreso,"w");
+            for (int l = 0; l < numeroEsp ; ++l) {
+                fprintf(outCompreso,"%c",caracteres[l]);
+                printf("%d >> %c\n",caracteres[l],caracteres[l]);
+            }
+            fclose(outCompreso);
             break;
         case '2':
             break;
@@ -71,7 +94,7 @@ int main() {
             puts("?OOO che?ol");
             break;
         case '0':
-            puts("Pinche practica fea osiosi");
+            puts("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAdios");
             break;
     }
 

@@ -15,6 +15,8 @@ ctype.h
 -
 stdlib.h
 -
+math.h
+-
 
 C:/Users/MrJua/Documents/Algoritmo-Huffman/main.c
 stdio.h

@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <math.h>
 
 typedef struct _Nodo{
     char dato;
@@ -23,7 +24,7 @@ typedef struct _NodoBin{
     char letra;
     long int bits;
     char nbits;
-    char *binary;
+    int binary;
 
     struct _NodoBin *sig;
 }NodoBin;
@@ -39,7 +40,7 @@ Nodo* allocateMem(char dato, int frec){
     return dummy;
 }
 
-NodoBin* allocateMemBin(char letra, long int bits, char nbits,char* binary){
+NodoBin* allocateMemBin(char letra, long int bits, char nbits,int binary){
     NodoBin* dummy;
     dummy = (NodoBin*)malloc(sizeof(NodoBin));
     dummy -> letra = letra;
@@ -50,7 +51,7 @@ NodoBin* allocateMemBin(char letra, long int bits, char nbits,char* binary){
     return dummy;
 }
 
-void InsertarTabla(NodoBin** Tabla,char caracter,long int altura, int valor,char *binario){
+void InsertarTabla(NodoBin** Tabla,char caracter,long int altura, int valor,int binario){
     NodoBin *auxiliar, *auxiliar_ref, *auxiliar_asignacion;
     auxiliar = allocateMemBin(caracter,valor,altura,binario);
     if(!*Tabla){
@@ -80,65 +81,58 @@ int binario (int n) {
     }
 }
 
-void CrearTabla(Nodo *arbol, int altura, int decimal_binario, NodoBin **tabla)
+int decimal(int n){
+    int decimalNumber = 0, i = 0, remainder;
+    while (n!=0){
+        remainder = n%10;
+        n /= 10;
+        decimalNumber += remainder*pow(2,i);
+        ++i;
+    }
+    return decimalNumber;
+}
+
+void CrearTabla(Nodo *arbol, int altura, int decimal_binario, NodoBin **tabla,int binarios)
 {
-    if(arbol->R)  CrearTabla(arbol->R, altura+1, decimal_binario << 1|1,tabla);
-    if(arbol->L) CrearTabla(arbol->L, altura+1, decimal_binario << 1,tabla);
+    if(arbol->R) {
+        CrearTabla(arbol->R, altura + 1, decimal_binario << 1 | 1, tabla,binarios);
+    }
+    if(arbol->L){
+        CrearTabla(arbol->L, altura+1, decimal_binario << 1,tabla,binarios);
+    }
     if(!arbol->R && !arbol->L){
-        char* aux_Bin = "";
-        int aux = binario(decimal_binario);
-        sprintf(aux_Bin, "%d", aux);
-        InsertarTabla(tabla,arbol->dato, altura, decimal_binario,aux_Bin);
+        binarios = binario(decimal_binario);
+        InsertarTabla(tabla,arbol->dato, altura, decimal_binario,binarios);
     }
 }
 
-
-void implementarbin(NodoBin *Arbol) {
-    if (Arbol != NULL) {
-        int t = strlen(Arbol->binary);
-        if (t == (Arbol->nbits - 1)) {
-            char *array = "";
-            sprintf(array,"0%s",Arbol->binary);
-            Arbol->binary = array;
-        }
-    }
-}
-
-char* guardarBinarios(NodoBin* top,FILE *fout,char *letras) {
-    NodoBin *aux = top;
-    NodoBin *aux2;
-    char* binarios = "";
-    if (aux != NULL) {
-        char *array = "";
-        while (aux != NULL) {
-            int codigo = binario(aux->bits);
-            sprintf(array, "%d", codigo);
-            aux->binary = array;
-            implementarbin(aux);
-            for (int i = 0; i < strlen(letras) ; ++i) {
-                aux2 = aux;
-                while(aux2 != NULL){
-                    if (aux2->letra == letras[i])
-                    {
-                        
+void obetenerTiraBinaria(NodoBin *listaBin, char *frase,FILE *salidaBin){
+    NodoBin *aux, *aux2;
+    char *array = "";
+    aux = listaBin;
+    if(listaBin != NULL){
+        for (int i = 0; i < strlen(frase) ; ++i) {
+            aux2 = aux;
+            while (aux2 != NULL) {
+                if(aux2->letra == frase[i]){
+                    sprintf(array,"%d",aux2->binary);
+                    if (strlen(array) == (aux2->nbits - 1)) {
+                        sprintf(array,"0%d",aux2->binary);
                     }
-                    aux2 = aux2->sig;
+                    fprintf(salidaBin,"%s",array);
+                    break;
                 }
-                puts("pasa while");
+                aux2 = aux2->sig;
             }
-            fprintf(fout,"%s",aux->binary);
-            printf("Caracter %c >> Bits  %s >> Profundidad %d\n", aux->letra, aux->binary, aux->nbits);
-            aux = aux->sig;
         }
     }
-    return binarios;
 }
 
-NodoBin *BuscaCaracter(NodoBin *Tabla, unsigned char c){
-    NodoBin *t;
-    t = Tabla;
-    while(t && t->letra != c) t = t->sig;
-    return t;
+void mostrarBinarios(NodoBin *aux){
+    while (aux != NULL) {
+        printf("Caracter %c >> Bits  %d >> Profundidad %d\n", aux->letra, aux->binary, aux->nbits);
+        aux = aux->sig;
+    }
 }
 
 void *Formatear_texto(char *s){
@@ -205,89 +199,9 @@ void preOrden (Nodo *top){
 
 void preOrden_PIMP (Nodo *top, FILE* fout){
     if (top != NULL){
-        fprintf(fout,"\r%c %d ",top->dato, top->frec);
+        fprintf(fout,"%d %c ",top->frec, top->dato);
         preOrden_PIMP (top->L,fout);
         preOrden_PIMP (top->R,fout);
-    }
-}
-
-void postOrden (Nodo *top){
-    if (top != NULL){
-        preOrden (top->L);
-        preOrden(top->R);
-        printf("Elemento = %d\n",top->dato);
-    }
-}
-
-void alta(Nodo ** top, char dato, int frec)
-{
-    if(*top == NULL){
-        *top = allocateMem(dato, frec);
-    }
-    else if(dato < (*top)->dato){
-        alta(&(*top)->L,dato,frec);
-    }
-    else{
-        alta(&(*top)->R,dato,frec);
-    }
-}
-
-void moveleft(Nodo **top)
-{
-    Nodo *auxiliar_asignacion,*auxiliar_ref;
-    auxiliar_ref=(*top);
-    auxiliar_asignacion=(*top)->L;
-    while(auxiliar_asignacion->R!=NULL)
-    {
-        auxiliar_ref=auxiliar_asignacion;
-        auxiliar_asignacion=auxiliar_asignacion->R;
-    }
-    (*top)->dato=auxiliar_asignacion->dato;
-    if(auxiliar_ref==(*top))
-    {
-        auxiliar_ref->L=auxiliar_asignacion->L;
-    }
-    else
-    {
-        auxiliar_ref->R=auxiliar_asignacion->L;
-    }
-    (*top)=auxiliar_asignacion;
-}
-
-void baja(Nodo **top,int dato)
-{
-    Nodo *aux;
-    if(*(top)==NULL)
-    {
-        puts("El arbol esta vacio");
-    }
-    else
-    {
-        if(dato<(*top)->dato)
-        {
-            baja(&(*top)->L,dato);
-        }
-        else if(dato>(*top)->dato)
-        {
-            baja(&(*top)->R,dato);
-        }
-        if(dato==(*top)->dato)
-        {
-            aux = (*top);
-            if (aux->L==NULL)
-            {
-                (*top)=aux->dato;
-            }
-            else if(aux->R==NULL)
-            {
-                (*top)=aux->L;
-            }
-            else
-            {
-                moveleft(&aux);
-            }
-            free(aux);
-        }
     }
 }
 
