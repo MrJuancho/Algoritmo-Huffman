@@ -8,8 +8,8 @@ int main() {
                     'u', 'v', 'w', 'x', 'y', 'z','.',',','#'};
     int conteos[29] = {0};
     Nodo *lista_frec = NULL, *arbolitos, *Arbol;
-    NodoBin *Binarios, *aux;
-    char* n_in = "frase.txt", *n_out = "arbol.txt", *cifrado_bin = "binario.txt",*compreso = "compreso.txt",
+    NodoBin *Binarios;
+    char* n_in = "frase.txt", *n_out = "arbol.txt", *cifrado_bin = "binario.txt",*compreso = "compreso.bin",
     letras[100];
     FILE *archivo = fopen(n_in, "rt");
     if (archivo == NULL) {
@@ -25,7 +25,7 @@ int main() {
         if(conteos[i] != 0) lista_frec = Alta_Inicial(abcdario[i], conteos[i], lista_frec);
     }
     lista_frec = OrdenamientoSeleccion(lista_frec);
-    Mostrar_Datos(lista_frec);
+    int length = Mostrar_Datos(lista_frec);
 
     puts("1 >> Codificar\n"
          "2 >> Decodificar\n"
@@ -81,7 +81,8 @@ int main() {
                 decBin = decimal(decBin);
                 caracteres[i] = decBin;
             }
-            FILE *outCompreso = fopen(compreso,"w");
+            FILE *outCompreso = fopen(compreso,"wb");
+            fwrite(&numeroEsp, sizeof(int), 1, outCompreso);
             for (int l = 0; l < numeroEsp ; ++l) {
                 fprintf(outCompreso,"%c",caracteres[l]);
                 printf("%d >> %c\n",caracteres[l],caracteres[l]);
@@ -89,15 +90,75 @@ int main() {
             fclose(outCompreso);
             break;
         case '2':
+            char arbol_des[100], compreso_des[100], *salida = "frasedec.txt";
+            puts("Ingresa el nombre de el archivo del arbol:");
+            scanf("%s",arbol_des);
+            fflush(stdin);
+            puts("Ingresa el nombre del archivo del cifrado:");
+            scanf(" %s",compreso_des);
+            fflush(stdin);
+            FILE *in_arbol,*in_compreso,*salida_txt;
+            in_arbol = fopen(arbol_des,"r");
+            in_compreso = fopen(compreso_des,"rb");
+            Nodo *listaaux = NULL, *Arbol_dec = NULL;
+            int nElementos = 0,i = 0,j = 0,auxmil;
+            int* numeros = (int*)malloc(nElementos* sizeof(int));
+            if (in_arbol == NULL && in_compreso == NULL) {
+                puts("Este archivo no existe");
+                return 0;
+            }else{
+                fread(&nElementos, sizeof(int), 1, in_compreso);
+                for (int l = 0; l < nElementos ; ++l) {
+                    int temp = 0;
+                    fread(&temp, sizeof(char), 1, in_compreso);
+                    numeros[l] = temp;
+                }
+            }
+            printf("%d\n",nElementos);
+            char arreglo[500];
+            FILE *bin_dec = fopen("bin_dec.txt","w+");
+            for (int m = 0; m < nElementos ; ++m) {
+                int temp = binario(numeros[m]);
+                char *arrtemp = "";
+                sprintf(arrtemp,"%08d",temp);
+                fprintf(bin_dec,"%s",arrtemp);
+            }
+            rewind(bin_dec);
+            fgets(arreglo,500,bin_dec);
+            puts(arreglo);
+            while ((auxmil = fgetc(in_arbol)) != EOF) {
+                if (auxmil == ' ')
+                    i++;
+            }
+            i /= 2;
+            int *num = (int*) malloc(i*sizeof(int));
+            char *letter = (char*) malloc(i*sizeof(char));
+            rewind(in_arbol);
+            while (!feof(in_arbol)) {
+                fscanf(in_arbol, "%d %c ", &num[j], &letter[j]);
+                if(letter[j] != '@') {
+                    listaaux = Alta_Inicial(letter[j], num[j], listaaux);
+                }
+                j++;
+            }
+            listaaux = OrdenamientoSeleccion(listaaux);
+            int size = Mostrar_Datos(listaaux);
+            //Arbol_dec = constructTree(letter,num,size);
+            //preOrden(Arbol_dec);
+
+            //decode_file(Arbol_dec,arreglo);
+
+            fclose(in_compreso);
+            fclose(in_arbol);
+            fclose(bin_dec);
+            //fclose(salida_txt);
             break;
         default:
             puts("?OOO che?ol");
             break;
         case '0':
-            puts("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAdios");
+            puts("Adios");
             break;
     }
-
-
     return 0;
 }

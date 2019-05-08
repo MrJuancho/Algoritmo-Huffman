@@ -95,12 +95,15 @@ int decimal(int n){
 void CrearTabla(Nodo *arbol, int altura, int decimal_binario, NodoBin **tabla,int binarios)
 {
     if(arbol->R) {
+       // printf("R >> %d, %c\n", arbol->frec , arbol->dato);
         CrearTabla(arbol->R, altura + 1, decimal_binario << 1 | 1, tabla,binarios);
     }
     if(arbol->L){
+        //printf("L >> %d, %c\n", arbol->frec , arbol->dato);
         CrearTabla(arbol->L, altura+1, decimal_binario << 1,tabla,binarios);
     }
     if(!arbol->R && !arbol->L){
+        //printf("Pone >> %d, %c\n", arbol->frec , arbol->dato);
         binarios = binario(decimal_binario);
         InsertarTabla(tabla,arbol->dato, altura, decimal_binario,binarios);
     }
@@ -167,7 +170,7 @@ void Contar_Frecuancias(char *s, int *count) {
     }
 }
 
-void Mostrar_Datos(Nodo *lista){
+int Mostrar_Datos(Nodo *lista){
     if(lista != NULL){
         int i = 0;
         while (lista != NULL){
@@ -176,15 +179,17 @@ void Mostrar_Datos(Nodo *lista){
             i++;
         }
         printf("La lista tiene %d datos\n", i);
+        return i;
     }else{
         puts("Tu Lista esta vacia\n");
+        return 0;
     }
 }
 
 void inOrden (Nodo *top){
     if (top != NULL){
         inOrden (top->L);
-        printf("Elemento = %d\n",top->dato);
+        printf("Caracter = %c Frecuencia = %d\n",top->dato, top->frec);
         inOrden(top->R);
     }
 }
@@ -192,7 +197,7 @@ void inOrden (Nodo *top){
 void preOrden (Nodo *top){
     if (top != NULL){
         printf("Caracter = %c Frecuencia = %d\n",top->dato, top->frec);
-        preOrden (top->L);
+        preOrden(top->L);
         preOrden(top->R);
     }
 }
@@ -282,12 +287,72 @@ void InsertarOrden(Nodo** Cabeza, Nodo *e){
     }
 }
 
-int size(Nodo *top)
-{
+Nodo* constructTreeUtil(char* letra,int pre[], int* preIndex, int low, int high, int size){
+
+    if (*preIndex >= size) {return NULL;}
+
+    Nodo *root = allocateMem(letra[*preIndex],pre[*preIndex]);
+    printf("%d %d >> %c %d\n",low,high,letra[*preIndex],pre[*preIndex]);
+
+    *preIndex +=  1;
+
+    if (low == high){
+        puts("raiz");
+        return root;
+    }
+
+    int i;
+    for ( i = low; i <= high; ++i ) {
+        if (pre[i] < root->frec) {
+
+            break;
+        }
+    }
+
+
+    root->L = constructTreeUtil(letra, pre, preIndex, *preIndex, i - 1, size);
+    root->R = constructTreeUtil(letra, pre, preIndex, i, high, size);
+
+    return root;
+}
+
+Nodo *constructTree(char* letra, int pre[], int size){
+    int preIndex = 0;
+    return constructTreeUtil(letra ,pre, &preIndex, 0, size - 1, size);
+}
+
+int size(Nodo *top){
     if (top==NULL)
         return 0;
     else
         return(size(top->L) + 1 + size(top->R));
 }
+
+char* decode_file(Nodo* root, char* s){
+    if (root != NULL && root->L != NULL && root->R != NULL){
+        char* ans = "";
+        Nodo* curr = root;
+        for (int i=0;i<strlen(s);i++) {
+            if (s[i] == '0') {
+                puts("L");
+                curr = curr->L;
+            } else {
+                printf("R : %d >> %c\n", curr->frec, curr->dato);
+                curr = curr->R;
+            }
+            puts("Function dies here");
+            if (!curr->R && !curr->L) {
+                sprintf(ans, "%c", curr->dato);
+                curr = root;
+            }
+        }
+        return ans;
+    }else{
+        printf("Algo falta\n");
+        return NULL;
+    }
+}
+
+
 
 #endif //ALGORITMO_HUFFMAN_FUNCIONES_H
