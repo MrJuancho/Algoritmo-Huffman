@@ -23,7 +23,6 @@ int main() {
         if(conteos[i] != 0) lista_frec = Alta_Inicial(abcdario[i], conteos[i], lista_frec);
     }
     lista_frec = OrdenamientoSeleccion(lista_frec);
-    int length = Mostrar_Datos(lista_frec);
 
     puts("1 >> Codificar\n"
          "2 >> Decodificar\n"
@@ -88,13 +87,7 @@ int main() {
             fclose(outCompreso);
             break;
         case '2':
-            char arbol_des[100], compreso_des[100], *salida = "frasedec.txt";
-            puts("Ingresa el nombre de el archivo del arbol:");
-            fflush(stdin);
-            scanf("%s",arbol_des);
-            puts("Ingresa el nombre del archivo del cifrado:");
-            fflush(stdin);
-            scanf(" %s",compreso_des);
+            char *arbol_des = "arbol.txt", *compreso_des = "compreso.bin", *salida = "frasedec.txt";
             FILE *in_arbol,*in_compreso,*salida_txt;
             in_arbol = fopen(arbol_des,"r");
             in_compreso = fopen(compreso_des,"rb");
@@ -120,6 +113,7 @@ int main() {
                 sprintf(arrtemp,"%08d",temp);
                 fprintf(bin_dec,"%s",arrtemp);
             }
+            printf("%d\n",nElementos);
             rewind(bin_dec);
             fgets(arreglo,500,bin_dec);
             while ((auxmil = fgetc(in_arbol)) != EOF) {
@@ -135,13 +129,10 @@ int main() {
                 listaaux = Alta_Inicial(letter[j], num[j], listaaux);
                 j++;
             }
-            listaaux = OrdenamientoSeleccion(listaaux);
             int size = Mostrar_Datos(listaaux);
             Arbol_dec = constructTree(num,letter,size);
-            preOrden(Arbol_dec);
             salida_txt = fopen("frase_dec.txt","wt");
             decode_file(Arbol_dec,arreglo,salida_txt);
-
             fclose(in_compreso);
             fclose(in_arbol);
             fclose(bin_dec);

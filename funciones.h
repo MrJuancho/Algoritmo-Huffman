@@ -326,13 +326,13 @@ void decode_file(Nodo* root, char* s,FILE *salida){
         Nodo* curr = root;
         for (int i=0;i<strlen(s);i++) {
             if (s[i] == '0') {
-
                 curr = curr->L;
             } else {
                 curr = curr->R;
             }
             if (!curr->R && !curr->L) {
                 fprintf(salida, "%c", curr->dato);
+                printf("%c",curr->dato);
                 curr = root;
             }
         }
