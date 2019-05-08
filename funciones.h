@@ -121,6 +121,14 @@ void obetenerTiraBinaria(NodoBin *listaBin, char *frase,FILE *salidaBin){
                     sprintf(array,"%d",aux2->binary);
                     if (strlen(array) == (aux2->nbits - 1)) {
                         sprintf(array,"0%d",aux2->binary);
+                    }else if(strlen(array) == (aux2->nbits -2)){
+                        sprintf(array,"00%d",aux2->binary);
+                    }else if (strlen(array) == (aux2->nbits -3)) {
+                        sprintf(array, "000%d", aux2->binary);
+                    }else if (strlen(array) == (aux2->nbits -4)) {
+                        sprintf(array, "0000%d", aux2->binary);
+                    }else if (strlen(array) == (aux2->nbits -5)) {
+                        sprintf(array, "00000%d", aux2->binary);
                     }
                     fprintf(salidaBin,"%s",array);
                     break;
@@ -336,8 +344,6 @@ void decode_file(Nodo* root, char* s,FILE *salida){
                 curr = root;
             }
         }
-    }else{
-        printf("Algo falta\n");
     }
 }
 

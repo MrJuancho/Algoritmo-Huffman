@@ -106,6 +106,7 @@ int main() {
                 }
             }
             char arreglo[500];
+            puts("aqui muere aveces");
             FILE *bin_dec = fopen("bin_dec.txt","w+");
             for (int m = 0; m < nElementos ; ++m) {
                 int temp = binario(numeros[m]);
@@ -131,12 +132,15 @@ int main() {
             }
             int size = Mostrar_Datos(listaaux);
             Arbol_dec = constructTree(num,letter,size);
+            puts(arreglo);
             salida_txt = fopen("frase_dec.txt","wt");
             decode_file(Arbol_dec,arreglo,salida_txt);
             fclose(in_compreso);
             fclose(in_arbol);
             fclose(bin_dec);
             fclose(salida_txt);
+            free(num);
+            free(letter);
             break;
         default:
             puts("?OOO che?ol");
