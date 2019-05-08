@@ -3,14 +3,12 @@
 #include "funciones.h"
 
 int main() {
-    char principal;
-    char abcdario[29] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+    char principal, abcdario[29] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
                     'u', 'v', 'w', 'x', 'y', 'z','.',',','#'};
     int conteos[29] = {0};
     Nodo *lista_frec = NULL, *arbolitos, *Arbol;
     NodoBin *Binarios;
-    char* n_in = "frase.txt", *n_out = "arbol.txt", *cifrado_bin = "binario.txt",*compreso = "compreso.bin",
-    letras[100];
+    char *n_in = "frase.txt", *n_out = "arbol.txt", *cifrado_bin = "binario.txt",*compreso = "compreso.bin", letras[100];
     FILE *archivo = fopen(n_in, "rt");
     if (archivo == NULL) {
         puts("Este archivo no existe");
@@ -18,8 +16,8 @@ int main() {
     }else {
         fgets(letras, 100, archivo);
     }
+    fclose(archivo);
     Formatear_texto(letras);
-    puts(letras);
     Contar_Frecuancias(letras,conteos);
     for (int i = 0; i < 29 ; ++i) {
         if(conteos[i] != 0) lista_frec = Alta_Inicial(abcdario[i], conteos[i], lista_frec);
@@ -92,11 +90,11 @@ int main() {
         case '2':
             char arbol_des[100], compreso_des[100], *salida = "frasedec.txt";
             puts("Ingresa el nombre de el archivo del arbol:");
+            fflush(stdin);
             scanf("%s",arbol_des);
-            fflush(stdin);
             puts("Ingresa el nombre del archivo del cifrado:");
-            scanf(" %s",compreso_des);
             fflush(stdin);
+            scanf(" %s",compreso_des);
             FILE *in_arbol,*in_compreso,*salida_txt;
             in_arbol = fopen(arbol_des,"r");
             in_compreso = fopen(compreso_des,"rb");
@@ -114,7 +112,6 @@ int main() {
                     numeros[l] = temp;
                 }
             }
-            printf("%d\n",nElementos);
             char arreglo[500];
             FILE *bin_dec = fopen("bin_dec.txt","w+");
             for (int m = 0; m < nElementos ; ++m) {
@@ -125,7 +122,6 @@ int main() {
             }
             rewind(bin_dec);
             fgets(arreglo,500,bin_dec);
-            puts(arreglo);
             while ((auxmil = fgetc(in_arbol)) != EOF) {
                 if (auxmil == ' ')
                     i++;
@@ -136,22 +132,20 @@ int main() {
             rewind(in_arbol);
             while (!feof(in_arbol)) {
                 fscanf(in_arbol, "%d %c ", &num[j], &letter[j]);
-                if(letter[j] != '@') {
-                    listaaux = Alta_Inicial(letter[j], num[j], listaaux);
-                }
+                listaaux = Alta_Inicial(letter[j], num[j], listaaux);
                 j++;
             }
             listaaux = OrdenamientoSeleccion(listaaux);
             int size = Mostrar_Datos(listaaux);
-            //Arbol_dec = constructTree(letter,num,size);
-            //preOrden(Arbol_dec);
-
-            //decode_file(Arbol_dec,arreglo);
+            Arbol_dec = constructTree(num,letter,size);
+            preOrden(Arbol_dec);
+            salida_txt = fopen("frase_dec.txt","wt");
+            decode_file(Arbol_dec,arreglo,salida_txt);
 
             fclose(in_compreso);
             fclose(in_arbol);
             fclose(bin_dec);
-            //fclose(salida_txt);
+            fclose(salida_txt);
             break;
         default:
             puts("?OOO che?ol");

@@ -12,15 +12,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4f00ed3b-15ad-4ec2-b7e2-8b18d753a690" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/MrJua.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Algoritmo_Huffman.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Algoritmo_Huffman.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Algoritmo_Huffman.ilk" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Algoritmo_Huffman.ilk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Algoritmo_Huffman.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Algoritmo_Huffman.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Algoritmo_Huffman.dir/main.c.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Algoritmo_Huffman.dir/vc140.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Algoritmo_Huffman.dir/vc140.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/compreso.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/compreso.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/funciones.h" beforeDir="false" afterPath="$PROJECT_DIR$/funciones.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
     </list>
@@ -40,8 +31,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="328">
-              <caret line="144" column="47" lean-forward="true" selection-start-line="144" selection-start-column="47" selection-end-line="144" selection-end-column="47" />
+            <state relative-caret-position="564">
+              <caret line="141" column="45" selection-start-line="141" selection-start-column="45" selection-end-line="141" selection-end-column="45" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -52,25 +43,16 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/funciones.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2138">
-              <caret line="344" selection-start-line="344" selection-end-line="344" />
+            <state relative-caret-position="1895">
+              <caret line="339" column="31" selection-start-line="339" selection-start-column="31" selection-end-line="339" selection-end-column="31" />
               <folding>
                 <element signature="e#123#142#0" expanded="true" />
                 <element signature="e#353#465#0" />
                 <element signature="e#717#1014#0" />
                 <element signature="e#1760#1882#0" />
-                <element signature="e#2103#2567#0" />
-                <element signature="e#3251#3444#0" />
-                <element signature="e#3446#4235#0" />
-                <element signature="e#4237#4616#0" />
-                <element signature="e#4618#4966#0" />
-                <element signature="e#4968#5119#0" />
-                <element signature="e#5304#5504#0" />
-                <element signature="e#5506#5803#0" />
-                <element signature="e#5805#6261#0" />
-                <element signature="e#7674#8280#0" />
-                <element signature="e#8054#8194#0" />
-                <element signature="e#8399#8516#0" />
+                <element signature="e#6055#6511#0" />
+                <element signature="e#6513#7140#0" />
+                <element signature="e#7142#7672#0" />
               </folding>
             </state>
           </provider>
@@ -172,11 +154,12 @@
       <workItem from="1556748120500" duration="17718000" />
       <workItem from="1556769618441" duration="1626000" />
       <workItem from="1556820384714" duration="52114000" />
+      <workItem from="1557332430888" duration="2752000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="138025000" />
+    <option name="totallyTimeSpent" value="140777000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -199,7 +182,7 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="right" id="Terminal" order="4" weight="0.2857143" />
-      <window_info anchor="right" x="1528" y="56" width="357" height="897" id="Run" order="5" weight="0.31023455" />
+      <window_info active="true" anchor="right" x="1528" y="56" width="357" height="897" id="Run" order="5" visible="true" weight="0.31023455" />
       <window_info anchor="right" id="Messages" order="6" sideWeight="0.46934226" weight="0.33102345" />
     </layout>
     <layout-to-restore>
@@ -262,33 +245,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/funciones.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2138">
-          <caret line="344" selection-start-line="344" selection-end-line="344" />
+        <state relative-caret-position="1895">
+          <caret line="339" column="31" selection-start-line="339" selection-start-column="31" selection-end-line="339" selection-end-column="31" />
           <folding>
             <element signature="e#123#142#0" expanded="true" />
             <element signature="e#353#465#0" />
             <element signature="e#717#1014#0" />
             <element signature="e#1760#1882#0" />
-            <element signature="e#2103#2567#0" />
-            <element signature="e#3251#3444#0" />
-            <element signature="e#3446#4235#0" />
-            <element signature="e#4237#4616#0" />
-            <element signature="e#4618#4966#0" />
-            <element signature="e#4968#5119#0" />
-            <element signature="e#5304#5504#0" />
-            <element signature="e#5506#5803#0" />
-            <element signature="e#5805#6261#0" />
-            <element signature="e#7674#8280#0" />
-            <element signature="e#8054#8194#0" />
-            <element signature="e#8399#8516#0" />
+            <element signature="e#6055#6511#0" />
+            <element signature="e#6513#7140#0" />
+            <element signature="e#7142#7672#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="328">
-          <caret line="144" column="47" lean-forward="true" selection-start-line="144" selection-start-column="47" selection-end-line="144" selection-end-column="47" />
+        <state relative-caret-position="564">
+          <caret line="141" column="45" selection-start-line="141" selection-start-column="45" selection-end-line="141" selection-end-column="45" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

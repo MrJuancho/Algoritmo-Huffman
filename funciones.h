@@ -287,38 +287,30 @@ void InsertarOrden(Nodo** Cabeza, Nodo *e){
     }
 }
 
-Nodo* constructTreeUtil(char* letra,int pre[], int* preIndex, int low, int high, int size){
+Nodo *constructTreeUtil(int *pre, char *preLN, int *index_ptr, int n)
+{
+    int index = *index_ptr;
 
-    if (*preIndex >= size) {return NULL;}
-
-    Nodo *root = allocateMem(letra[*preIndex],pre[*preIndex]);
-    printf("%d %d >> %c %d\n",low,high,letra[*preIndex],pre[*preIndex]);
-
-    *preIndex +=  1;
-
-    if (low == high){
-        puts("raiz");
-        return root;
-    }
-
-    int i;
-    for ( i = low; i <= high; ++i ) {
-        if (pre[i] < root->frec) {
-
-            break;
-        }
+    if (index == n) {
+        return NULL;
     }
 
 
-    root->L = constructTreeUtil(letra, pre, preIndex, *preIndex, i - 1, size);
-    root->R = constructTreeUtil(letra, pre, preIndex, i, high, size);
+    Nodo *temp = allocateMem(preLN[index],pre[index]);
+    (*index_ptr)++;
 
-    return root;
+    if (preLN[index] == '@'){
+        temp->L  = constructTreeUtil(pre, preLN, index_ptr, n);
+        temp->R = constructTreeUtil(pre, preLN, index_ptr, n);
+    }
+
+    return temp;
 }
 
-Nodo *constructTree(char* letra, int pre[], int size){
-    int preIndex = 0;
-    return constructTreeUtil(letra ,pre, &preIndex, 0, size - 1, size);
+Nodo *constructTree(int pre[], char preLN[], int n)
+{
+    int index = 0;
+    return constructTreeUtil (pre, preLN, &index, n);
 }
 
 int size(Nodo *top){
@@ -328,28 +320,24 @@ int size(Nodo *top){
         return(size(top->L) + 1 + size(top->R));
 }
 
-char* decode_file(Nodo* root, char* s){
+void decode_file(Nodo* root, char* s,FILE *salida){
     if (root != NULL && root->L != NULL && root->R != NULL){
         char* ans = "";
         Nodo* curr = root;
         for (int i=0;i<strlen(s);i++) {
             if (s[i] == '0') {
-                puts("L");
+
                 curr = curr->L;
             } else {
-                printf("R : %d >> %c\n", curr->frec, curr->dato);
                 curr = curr->R;
             }
-            puts("Function dies here");
             if (!curr->R && !curr->L) {
-                sprintf(ans, "%c", curr->dato);
+                fprintf(salida, "%c", curr->dato);
                 curr = root;
             }
         }
-        return ans;
     }else{
         printf("Algo falta\n");
-        return NULL;
     }
 }
 
